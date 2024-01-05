@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
   nginx:
+    container_name: nginx
     image: nginx:latest
     ports:
       - 80:80
@@ -15,6 +16,7 @@ services:
       - ./certbot/conf/live/${APPLICATION_DOMAIN}/:/etc/nginx/certificates/
 
   certbot:
+    container_name: certbot
     image: certbot/certbot:latest
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
