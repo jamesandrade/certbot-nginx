@@ -49,6 +49,7 @@ if [ -f .env ]; then
     echo "Iniciando nginx com as novas configs"
     docker compose up nginx -d
     echo "adicionando cron para atualizar o certificado"
-    cat <(crontab -l) <(echo "0 0 1 * * docker run --rm certbot renew && docker restart nginx") | crontab -
+    caminho_atual=$PWD
+    cat <(crontab -l) <(echo "0 0 1 * * ${caminho_atual}/cron.sh") | crontab -
     echo "Finalizado!"
 fi
