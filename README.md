@@ -36,7 +36,7 @@ Para utilizar esse projeto, você precisará estar em um ambiente Linux, com [Gi
 Clone o projeto em seu ambiente Linux
 
 ```bash
-git clone https://github.com/jamesandrade/certbot-nginx
+git clone https://github.com/jamesandrade/certbot-nginx.git
 ```
 
 Accesse o diretório
