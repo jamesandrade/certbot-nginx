@@ -58,8 +58,8 @@ if [ -f .env ]; then
     sleep 10
     echo "Iniciando nginx com as novas configs"
     docker compose up nginx -d
-    echo "adicionando cron para atualizar o certificado"
-    if [ "$no_cron" == true ]; then
+    if [ "$no_cron" == false ]; then
+        echo "adicionando cron para atualizar o certificado"
         caminho_atual=$PWD
         cat <(crontab -l) <(echo "0 0 1 * * ${caminho_atual}/cron.sh >> /var/log/certbot_cron.log 2>&1") | crontab -
     fi
