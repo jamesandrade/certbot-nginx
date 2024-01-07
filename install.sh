@@ -62,5 +62,6 @@ if [ -f .env ]; then
     if [ "$no_cron" == true ]; then
         caminho_atual=$PWD
         cat <(crontab -l) <(echo "0 0 1 * * ${caminho_atual}/cron.sh >> /var/log/certbot_cron.log 2>&1") | crontab -
+    fi
     echo "Finalizado!"
 fi
