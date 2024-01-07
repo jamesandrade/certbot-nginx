@@ -34,12 +34,14 @@ if [ -f .env ]; then
     docker compose run --rm certbot certonly --webroot --webroot-path /var/www/certbot/ -d ${APPLICATION_DOMAIN} --email ${APPLICATION_MAIL} --agree-tos --non-interactive
     echo "Down nginx"
     docker compose down nginx
+    echo "Copiando certificados"
+    cp -L certbot/conf/live/${APPLICATION_DOMAIN}/* nginx/certificates
     echo "Reescrevendo config. nginx para https"
     printf "server {
     listen 443 ssl;
     server_name ${APPLICATION_DOMAIN};
-    ssl_certificate /etc/nginx/certificates/fullchain1.pem;
-    ssl_certificate_key /etc/nginx/certificates/privkey1.pem;
+    ssl_certificate /etc/nginx/certificates/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certificates/privkey.pem;
     location / {
         proxy_pass ${APPLICATION_REDIRECT};
     }
@@ -50,6 +52,6 @@ if [ -f .env ]; then
     docker compose up nginx -d
     echo "adicionando cron para atualizar o certificado"
     caminho_atual=$PWD
-    cat <(crontab -l) <(echo "0 0 1 * * ${caminho_atual}/cron.sh") | crontab -
+    cat <(crontab -l) <(echo "0 0 1 * * ${caminho_atual}/cron.sh >> /var/log/certbot_cron.log 2>&1") | crontab -
     echo "Finalizado!"
 fi
