@@ -1,4 +1,5 @@
 #!/bin/bash
+
 if [ -f .env ]; then
     set -a
     . ./.env

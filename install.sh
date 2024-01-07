@@ -1,4 +1,12 @@
 #!/bin/bash
+no_cron=false
+
+for arg in "$@"; do
+    if [ "$arg" == "--no-cron" ]; then
+        no_cron=true
+        break
+    fi
+done
 
 if [ -f .env ]; then
     echo "Criando pastas"
@@ -51,7 +59,8 @@ if [ -f .env ]; then
     echo "Iniciando nginx com as novas configs"
     docker compose up nginx -d
     echo "adicionando cron para atualizar o certificado"
-    caminho_atual=$PWD
-    cat <(crontab -l) <(echo "0 0 1 * * ${caminho_atual}/cron.sh >> /var/log/certbot_cron.log 2>&1") | crontab -
+    if [ "$no_cron" == true ]; then
+        caminho_atual=$PWD
+        cat <(crontab -l) <(echo "0 0 1 * * ${caminho_atual}/cron.sh >> /var/log/certbot_cron.log 2>&1") | crontab -
     echo "Finalizado!"
 fi
